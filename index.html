@@ -1,0 +1,23 @@
+
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Football Predictor</title></head>
+<body style="font-family:Arial; max-width:600px; margin:2rem auto;">
+<h1>Football Predictor</h1>
+<label>Home team: <input id="home" value="Team1"></label><br>
+<label>Away team: <input id="away" value="Team2"></label><br>
+<button onclick="predict()">Predict</button>
+<div id="out" style="margin-top:1rem; padding:1rem; border:1px solid #ddd"></div>
+<script>
+async function predict(){
+  const resp = await fetch("/predict",{method:"POST", headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({HomeTeam:document.getElementById("home").value,
+                          AwayTeam:document.getElementById("away").value})});
+  const j = await resp.json();
+  document.getElementById("out").innerHTML = "Prediction: "+j.prediction+"<br>Probs: "+
+    "Home "+j.probabilities.home_win.toFixed(2)+", Draw "+j.probabilities.draw.toFixed(2)+
+    ", Away "+j.probabilities.away_win.toFixed(2);
+}
+</script>
+</body>
+</html>
